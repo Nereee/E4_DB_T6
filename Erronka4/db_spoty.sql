@@ -109,12 +109,12 @@ create table Gustukoak(
 );
 
 create table Erreprodukzioak(
+	codigo INT PRIMARY KEY auto_increment,
 	IDBezeroa int,
     IDAudio int not null,
     ErreData date not null,
-    primary key (IDBezeroa, IDAudio, ErreData),
-    foreign key (IDBezeroa) references  bezeroa (IDBezeroa) on update cascade on delete cascade,
-    foreign key (IDAudio) references  Audioa (IDAudio) on update cascade
+    foreign key (IDBezeroa) references  bezeroa (IDBezeroa) on update cascade on delete set null,
+    foreign key (IDAudio) references  Audioa (IDAudio) on update cascade on delete set null
 );
 
 create table Estatistikak(

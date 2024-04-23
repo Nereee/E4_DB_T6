@@ -51,7 +51,7 @@ create table Premium(
 
 create table Album(
 	IDAlbum int auto_increment not null primary key,
-    Izenbura varchar(50) not null,
+    Izenburua varchar(50) not null,
     Eguna date not null,
     Generoa varchar(25),
 	IDMusikaria int not null,

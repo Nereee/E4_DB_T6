@@ -27,7 +27,7 @@ INSERT INTO Premium (IDBezeroa, Iraungitze_data) VALUES
 (2, '2025-04-19'),
 (4, '2025-04-20');
 
-INSERT INTO Album (Izenbura, Eguna, Generoa, IDMusikaria) VALUES
+INSERT INTO Album (Izenburua, Eguna, Generoa, IDMusikaria) VALUES
 ('Viridarquía', '2014-04-19','pop', 1),
 ('Un verano sin ti', '2018-05-02','rock', 2),
 ('Rumba a lo desconocido', '2020-07-2','rap', 3),

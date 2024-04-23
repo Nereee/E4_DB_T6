@@ -9,7 +9,7 @@ create table musikaria(
 	IzenArtistikoa varchar(50) not null unique,
     MusikIrudia BLOB,
     Ezaugarria enum('bakarlaria', 'taldea') not null,
-    Deskribapena varchar (100)
+    Deskribapena varchar (500)
 );
 
 
@@ -22,7 +22,7 @@ create table Podcasterra(
 
 
 create table Hizkuntza(
-	IDHizkuntza enum('ES', 'EU', 'EN', 'FR', 'DE', 'CA', 'GA', 'AR') primary key,
+	IDHizkuntza enum('ES', 'EU', 'EN', 'FR', 'DE', 'CA', 'AR') primary key,
     Deskribapena varchar(100) not null
 );
 
@@ -60,7 +60,7 @@ create table Album(
 
 create table Audioa(
 	IDAudio int auto_increment not null primary key,
-    Izena varchar(30) not null,
+    Izena varchar(100) not null,
     Iraupena time,
     AudioIrudia BLOB,
     Mota enum('Podcast','Abestia') not null
@@ -68,7 +68,7 @@ create table Audioa(
 
 create table Podcast(
 	IDAudio int not null,
-    Kolaboratzaileak varchar(50),
+    Kolaboratzaileak varchar(100),
     IDPodcaster int not null,
     primary key (IDAudio),
     foreign key (IDPodcaster) references Podcasterra (IDPodcaster) on delete cascade on update cascade, 
@@ -111,7 +111,7 @@ create table Gustukoak(
 create table Erreprodukzioak(
 	codigo INT PRIMARY KEY auto_increment,
 	IDBezeroa int,
-    IDAudio int not null,
+    IDAudio int,
     ErreData date not null,
     foreign key (IDBezeroa) references  bezeroa (IDBezeroa) on update cascade on delete set null,
     foreign key (IDAudio) references  Audioa (IDAudio) on update cascade on delete set null

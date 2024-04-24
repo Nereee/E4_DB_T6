@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="XSL-APA.xsl"?>
+<enpresa>
+    <langileak>
+    <langilea>
+        <nan>12345678A</nan>
+        <izena>Jon</izena>
+        <abizena>Lopez</abizena>
+        <posta>jon.lopez@enpresa.eus</posta>
+        <telefonoa>(+34) 123 456 789</telefonoa>
+        <helbidea>Errementari Kalea, 24, Barakaldo</helbidea>
+        <departamentua>Giza baliabideak</departamentua>
+        <ardura>Zuzendaritza</ardura>
+    </langilea>
+    <langilea>
+        <nan>23456789B</nan>
+        <izena>Ane</izena>
+        <abizena>Garcia</abizena>
+        <posta>ane.garcia@enpresa.eus</posta>
+        <telefonoa>(+34) 987 654 321</telefonoa>
+        <helbidea>Berria Kalea, 5, Portugalete</helbidea>
+        <departamentua>Marketin</departamentua>
+        <ardura>Analista</ardura>
+    </langilea>
+    <langilea>
+        <nan>34567890C</nan>
+        <izena>Mikel</izena>
+        <abizena>Uria</abizena>
+        <posta>mikel.uria@enpresa.eus</posta>
+        <telefonoa>(+34) 567 890 123</telefonoa>
+        <helbidea>Erribera Kalea, 7, Lekeitio</helbidea>
+        <departamentua>Zuzendaritza Orokorra</departamentua>
+        <ardura>Analista</ardura>
+    </langilea>
+    <langilea>
+        <nan>45678901D</nan>
+        <izena>Ane</izena>
+        <abizena>Etxebarria</abizena>
+        <posta>ane.etxebarria@enpresa.eus</posta>
+        <telefonoa>(+34) 321 654 987</telefonoa>
+        <helbidea>Euskal Herria Etorbidea, 3, Donostia</helbidea>
+        <departamentua>Lege-saila</departamentua>
+        <ardura>Langilea</ardura>
+    </langilea>
+    <langilea>
+        <nan>56789012E</nan>
+        <izena>Markel</izena>
+        <abizena>Landa</abizena>
+        <posta>markel.landa@enpresa.eus</posta>
+        <telefonoa>(+34) 789 012 345</telefonoa>
+        <helbidea>Mendia Etorbidea, 21, Eibar</helbidea>
+        <departamentua>IT</departamentua>
+        <ardura>Langilea</ardura>
+    </langilea>
+    <langilea>
+        <nan>67890123F</nan>
+        <izena>Amaia</izena>
+        <abizena>Lopez</abizena>
+        <posta>amaia.lopez@enpresa.eus</posta>
+        <telefonoa>(+34) 456 789 012</telefonoa>
+        <helbidea>San Roke Kalea, 15, Bermeo</helbidea>
+        <departamentua>Salmentak</departamentua>
+        <ardura>Zuzendaritza</ardura>
+    </langilea>
+    <langilea>
+        <nan>78901234G</nan>
+        <izena>Iker</izena>
+        <abizena>Mendizabal</abizena>
+        <posta>iker.mendizabal@enpresa.eus</posta>
+        <telefonoa>(+34) 890 123 456</telefonoa>
+        <helbidea>Bizkaia Plaza, 10, Bilbao</helbidea>
+        <departamentua>Finantzak</departamentua>
+        <ardura>Analista</ardura>
+    </langilea>
+</langileak>
+
+
+    <departamentuak>
+    <departamentua>
+        <izena>Giza baliabideak</izena>
+        <helbidea> Gran Via Kalea,12, Bilbo</helbidea>
+        <telefono>(+34) 123 456 789</telefono>
+        <posta>gb@enpresa.eus</posta>
+    </departamentua>
+    <departamentua>
+        <izena>Marketin</izena>
+        <helbidea>Larrazabal Kalea5, Getxo</helbidea>
+        <telefono>(+34) 987 654 321</telefono>
+        <posta>marketin@enpresa.eus</posta>
+    </departamentua>
+    <departamentua>
+        <izena>Zuzendaritza Orokorra</izena>
+        <helbidea>Iparragirre Plaza, 3, Durango</helbidea>
+        <telefono>(+34) 567 890 123</telefono>
+        <posta>zuzendaritza@enpresa.eus</posta>
+    </departamentua>
+    <departamentua>
+        <izena>Lege-saila</izena>
+        <helbidea>Barrainkua Kalea, 8, Gernika</helbidea>
+        <telefono>(+34) 321 654 987</telefono>
+        <posta>legeak@enpresa.eus</posta>
+    </departamentua>
+    <departamentua>
+        <izena>IT</izena>
+        <helbidea>Aldapa Etorbidea, 23, Erandio</helbidea>
+        <telefono>(+34) 789 012 345</telefono>
+        <posta>it@enpresa.eus</posta>
+    </departamentua>
+    <departamentua>
+        <izena>Salmentak</izena>
+        <helbidea>San Martin Kalea, 7, Bermeo</helbidea>
+        <telefono>(+34) 456 789 012</telefono>
+        <posta>salmentak@enpresa.eus</posta>
+    </departamentua>
+    <departamentua>
+        <izena>Finantzak</izena>
+        <helbidea>Euskal Herria Plaza, 1, Leioa</helbidea>
+        <telefono>(+34) 890 123 456</telefono>
+        <posta>finantzak@enpresa.eus</posta>
+    </departamentua>
+</departamentuak>
+
+
+
+    <ardurak>
+        <ardura>
+            <izena>Zuzendaritza</izena>
+            <deskribapena>Departamentuko buruak dira</deskribapena>
+        </ardura>
+        <ardura>
+            <izena>Analista</izena>
+            <deskribapena>Lanak egiten direnean errepasatzen dituzte</deskribapena>
+        </ardura>
+        <ardura>
+            <izena>Langilea</izena>
+            <deskribapena>Lanak egiten dituzte</deskribapena>
+        </ardura>
+    </ardurak>
+</enpresa>

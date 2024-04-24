@@ -1,0 +1,163 @@
+/*********************************/
+#main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 10px;
+}
+
+#main-header img {
+    width: auto;
+    height: 100px;
+    margin-left: 20px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-right: 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #8bc4cc;
+}
+
+#desplegablea-a {
+    display: none;
+    position: absolute;
+    background-color: #333;
+}
+
+.dropdown:hover #desplegablea-a {
+    display: block;
+}
+
+#main-header img {
+    width: auto;
+    height: 100px;
+    margin-left: 20px;
+}
+
+nav a{
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+/**************************************/
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #666;
+    background: #e5e4e4;
+    font-size: 1em;
+    line-height: 1.5em;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h4 {
+    text-align: center;
+    margin: 15px 0;
+}
+
+p {
+    margin: 0 0 1.5em 0;
+}
+
+#main-content {
+    background: white;
+    max-width: 800px;
+    min-width: 600px;
+    margin: 20px auto;
+    padding: 40px;
+    text-align: justify;
+}
+
+#main-content img {
+    width: 100%;
+    height: auto;
+}
+
+/*****************************/
+
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+footer {
+	background: #333;
+	color: white;
+	text-align: center;
+	padding: 20px;
+	margin-top: 40px;
+    flex-grow: 1;
+}
+.fi {
+    margin-top: 20px;
+}
+footer a:hover {
+    color: #8bc4cc;
+}
+#logoa {
+    width: 80px;
+    border: 2px solid #f2f2f2;
+    border-radius: 100px;
+}
+#sareak img{
+    width: 40px;
+    display: inline-block;
+    opacity: 0.4;
+    transition: 0.3s ease;
+}
+#sareak img:hover {
+    transition: 0.3s ease;
+    opacity: 1;
+}
+@media screen and (max-width: 600px){
+    #main-header {
+        flex-direction: column;
+        align-items: center;
+    }
+    #main-header img {
+        margin: 0;
+    } 
+    nav ul li {
+        margin-right: 15px;
+    }
+    nav ul li:first-child {
+        margin-left: 20px;
+    }
+    #desplegablea-a {
+        min-width: 21%;
+    }
+}

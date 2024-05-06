@@ -18,14 +18,14 @@ INSERT INTO Podcasterra (IzenArtistikoa, PodIrudia, Deskribapena) VALUES
 ('Jordi Wild', ' ', 'Hemengo Podcaster ezagunena'),
 ('Marikarmen', ' ', 'Hasi berria den podkast bat');
 INSERT INTO bezeroa (Izena, Abizena, Hizkuntza, Erabiltzailea, Pasahitza, Jaiotze_data, Erregistro_data, mota) VALUES
-('Yorch', 'Charles', 'EN', 'charly', 'password123', '1990-01-01', '2024-04-19', 'Free'),
-('Aitor', 'Mentxaka', 'ES', 'Mentxaka', 'pasahitza123', '1999-01-01', '2024-04-20', 'Premium'),
-('Peru', 'Jauregi', 'ES', 'PeruJ', 'pasahitza123', '2000-01-01', '2024-04-21', 'Free'),
-('Andoni', 'Salsidua', 'ES', 'Salsidu', 'pasahitza123', '2002-01-01', '2024-04-22', 'Premium');
+('Yorch', 'Charles', 'EN', 'charly', 'password123', '1990-01-01', now(), 'Free'),
+('Aitor', 'Mentxaka', 'ES', 'Mentxaka', 'pasahitza123', '1999-01-01', now(), 'Premium'),
+('Peru', 'Jauregi', 'ES', 'PeruJ', 'pasahitza123', '2000-01-01', now(), 'Free'),
+('Andoni', 'Salsidua', 'ES', 'Salsidu', 'pasahitza123', '2002-01-01', now(), 'Premium');
 
 INSERT INTO Premium (IDBezeroa, Iraungitze_data) VALUES
-(2, '2025-04-19'),
-(4, '2025-04-20');
+(2, (date_add(now(), interval 1 year))),
+(4, (date_add(now(), interval 1 year)));
 
 INSERT INTO Album (Izenburua, Eguna, Generoa, IDMusikaria) VALUES
 ('Viridarquía', '2014-04-19','pop', 1),
@@ -124,22 +124,22 @@ INSERT INTO Gustukoak (IDBezeroa, IDAudio) VALUES
 (4,1);
 
 INSERT INTO Erreprodukzioak (IDBezeroa, IDAudio, ErreData) VALUES
-(1, 1, '2024-04-19'),
-(2, 4, '2024-04-19'),
-(3, 5, '2024-04-19'),
-(4, 8, '2024-04-19'),
-(1, 12, '2024-04-19'),
-(2, 18, '2024-04-19'),
-(3, 17, '2024-04-19'),
-(4, 16, '2024-04-19'),
-(1, 3, '2024-04-19'),
-(2, 5, '2024-04-19'),
-(3, 5, '2024-04-19'),
-(4, 5, '2024-04-19'),
-(1, 3, '2024-04-19'),
-(2, 8, '2024-04-19'),
-(3, 11, '2024-04-19'),
-(4, 12, '2024-04-19');
+(1, 1, now()),
+(2, 4, now()),
+(3, 5, now()),
+(4, 8, now()),
+(1, 12, now()),
+(2, 18, now()),
+(3, 17, now()),
+(4, 16, now()),
+(1, 3, now()),
+(2, 5, now()),
+(3, 5, now()),
+(4, 5, now()),
+(1, 3, now()),
+(2, 8, now()),
+(3, 11, now()),
+(4, 12, now());
 
 INSERT INTO Estatistikak (IDAudio, TopGustokoAbesti, TopGustukoPodcast, TopEntzundakoak, TopPlaylist) VALUES
 (1, 'Top Abestia', 'Top Podcast', 'Top Entzundakoak', 'Top Playlist');

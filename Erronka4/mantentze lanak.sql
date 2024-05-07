@@ -1,5 +1,5 @@
 use db_spoty;
--- ***INDIZEAK***
+-- *********************************INDIZEAK****************************
 
 -- musikaria
 create index idx_IzenArtistikoa on musikaria(IzenArtistikoa); -- izen artiskikoaren arabera bilatzeko
@@ -23,7 +23,7 @@ select * from Album where IDMusikaria = 1;
 create index idx_IDBezeroa on Playlist(IDBezeroa); -- Bezero baten playlistak bilatzeko
 select * from Playlist where IDBezeroa = 3;
 
--- ***PROZEDURAK ETA FUNTZIOAK***
+-- *****************************PROZEDURAK ETA FUNTZIOAK*****************************
 
 -- Erabiltzaileak gehitzeko
 DELIMITER //
@@ -87,14 +87,14 @@ call DeleteBezeroa(6); -- Ezabatu nahi duzun erabuiltzailearen ID-a erabili
 -- Adina kalkulatzeko
 DELIMITER //
 
-create function AdinaKalkulatu(
-    p_Jaiotze_data date
+create function KalkulatuAdina(
+    p_jaiotze_data date
 )
 returns int
 begin
     declare adina int;
-    set adina = year(now()) - year(p_Jaiotze_data);
-    if month(now()) < month(p_Jaiotze_data) or (month(now()) = month(p_Jaiotze_data) and day(now()) < day(p_Jaiotze_data)) then
+    set adina = year(now()) - year(p_jaiotze_data);
+    if month(now()) < month(p_jaiotze_data) or (month(now()) = month(p_jaiotze_data) and day(now()) < day(p_jaiotze_data)) then
         set adina = adina - 1;
     end if;
     return adina;
@@ -103,8 +103,103 @@ end //
 DELIMITER ;
 
 -- KONPROBAKETA
-select AdinaKalkulatu('1990-01-01') as adina;
+select KalkulatuAdina('1990-01-01') as adina;
 -- KONPROBAKETA
+
+-- ********************************TRIGERRAK********************************
+
+DELIMITER // -- Album bat ezabatzen dugunean, barruan dituen abestiak ezabatzeko
+
+create trigger delete_album_abestiak
+before delete on Album
+for each row
+begin
+    delete from Abestia where IDAlbum = old.IDAlbum;
+end //
+
+DELIMITER ;
+
+-- KONPROBAKETA
+#delete from Album where IDAlbum = 2;
+select au.Izena as Abestia, m.IzenArtistikoa as Artista
+from Audioa au
+join Abestia ab on au.IDAudio = ab.IDAudio
+join Album al on ab.IDAlbum = al.IDAlbum
+join musikaria m on al.IDMusikaria = m.IDMusikaria
+where m.IDMusikaria = 2;
+-- KONPROBAKETA
+
+DELIMITER // -- Arstista bat ezabatzen dugunean, dituen albumak eta abestiak ezabatzeko
+
+create trigger delete_artista_albumak_abestiak
+before delete on musikaria
+for each row
+begin
+    -- Artistak dituen albumak ezabatzeko
+    delete from Album where IDMusikaria = old.IDMusikaria;
+
+    -- Albumak dituen abestiak ezabatzeko
+    delete from Abestia where IDAlbum in (select IDAlbum from Album where IDMusikaria = old.IDMusikaria);
+end //
+
+DELIMITER ;
+
+-- KONPROBAKETA
+#delete from musikaria where IDMusikaria = 4;
+select * from Album where IDMusikaria = 4;
+
+select au.Izena as Abestia, m.IzenArtistikoa as Artista
+from Audioa au
+join Abestia ab on au.IDAudio = ab.IDAudio
+join Album al on ab.IDAlbum = al.IDAlbum
+join musikaria m on al.IDMusikaria = m.IDMusikaria
+where m.IDMusikaria = 4;
+-- KONPROBAKETA
+
+DELIMITER // 
+
+DELIMITER ;
+--  *******************************GERTAERAK**************************
+
+DELIMITER // -- Iraungitze data iritsi denean premium kontuak free bihurtzeko
+
+create event aktualizatu_premium_kontuak
+on schedule every 1 day
+do
+begin
+    declare uneko_data date;
+    declare erabiltzaile_id int;
+    
+    -- Uneko data lortu
+    set uneko_data = curdate();
+    
+    -- Lortu premium bezeroa iraungituta duten erabiltzaileen id-a
+    select idbezeroa into erabiltzaile_id
+    from premium
+    where iraungitze_data <= uneko_data;
+    
+    -- Free kontua bihurtu erabiltzaileei kontua iraungitua denean
+    if erabiltzaile_id is not null then
+        update bezeroa
+        set mota = 'free'
+        where idbezeroa = erabiltzaile_id;
+        
+        -- Ezabatu premium datuak erabiltzaile horretarako
+        delete from premium
+        where idbezeroa = erabiltzaile_id;
+        
+    end if;
+end;
+
+DELIMITER ;
+
+-- KONPROBAKETA
+select b.IDBezeroa, b.Izena, b.Abizena, b.Hizkuntza, b.Erabiltzailea, b.Pasahitza, b.Jaiotze_data, b.Erregistro_data, b.mota, p.Iraungitze_data
+from bezeroa b
+join Premium p on b.IDBezeroa = p.IDBezeroa;
+-- KONPROBAKETA
+
+
 
 
 

@@ -126,7 +126,3 @@ create table Estatistikak(
     TopPlaylist varchar (100) not null
 );
 
-
-
-
-

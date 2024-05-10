@@ -106,9 +106,9 @@ DELIMITER ;
 select KalkulatuAdina('1990-01-01') as adina;
 -- KONPROBAKETA
 
--- ********************************TRIGERRAK********************************
+-- ********************************TRIGER ETA GERTAERAK********************************
 
-DELIMITER // -- Album bat ezabatzen dugunean, barruan dituen abestiak ezabatzeko
+DELIMITER // 
 
 create trigger delete_album_abestiak
 before delete on Album
@@ -129,7 +129,7 @@ join musikaria m on al.IDMusikaria = m.IDMusikaria
 where m.IDMusikaria = 2;
 -- KONPROBAKETA
 
-DELIMITER // -- Arstista bat ezabatzen dugunean, dituen albumak eta abestiak ezabatzeko
+DELIMITER // 
 
 create trigger delete_artista_albumak_abestiak
 before delete on musikaria
@@ -156,14 +156,74 @@ join musikaria m on al.IDMusikaria = m.IDMusikaria
 where m.IDMusikaria = 4;
 -- KONPROBAKETA
 
+DELIMITER //
+create trigger update_top_gustoko_abesti
+after insert on Gustukoak
+for each row
+begin
+    update Estatistikak
+    set TopGustokoAbesti = (select group_concat(distinct au.Izena separator ', ')
+        from Audioa au
+        join Gustukoak gu on au.IDAudio = gu.IDAudio
+        where au.Mota = 'Abestia'
+        group by gu.IDBezeroa
+        order by COUNT(*) desc
+        limit 5
+    );
+end //
+DELIMITER ;
+
+
+DELIMITER //
+create trigger update_top_gustuko_podcast
+after insert on Gustukoak
+for each row
+begin
+    update Estatistikak
+    set TopGustukoPodcast = (
+        select Izena
+        from Audioa
+        where Mota = 'Podcast'
+        group by IDAudio
+        order by count(*) desc
+        limit 5
+    );
+end //
+DELIMITER ;
+
+DELIMITER //
+create trigger update_top_entzundakoak
+after insert on Erreprodukzioak
+for each row
+begin
+    update Estatistikak
+    set TopEntzundakoak = (
+        select Izena
+        from Audioa
+        where IDAudio = new.IDAudio
+    );
+end //
+DELIMITER ;
+
+DELIMITER //
+create trigger update_top_playlist
+after insert on PLaylist_Abestiak
+for each row
+begin
+    update Estatistikak
+    set TopPlaylist = (
+        select Izenburua
+        from Playlist
+        where IDList = new.IDList
+    );
+end //
+DELIMITER ;
+
+
+
 DELIMITER // 
 
-DELIMITER ;
---  *******************************GERTAERAK**************************
-
-DELIMITER // -- Iraungitze data iritsi denean premium kontuak free bihurtzeko
-
-create event aktualizatu_premium_kontuak
+create event update_premium_bezeroak
 on schedule every 1 day
 do
 begin
@@ -194,6 +254,14 @@ end;
 DELIMITER ;
 
 -- KONPROBAKETA
+update Premium
+set Iraungitze_data = '2023-03-03'
+where IDBezeroa = (
+    select IDBezeroa
+    from bezeroa
+    where Erabiltzailea = 'Mentxaka'
+);
+
 select b.IDBezeroa, b.Izena, b.Abizena, b.Hizkuntza, b.Erabiltzailea, b.Pasahitza, b.Jaiotze_data, b.Erregistro_data, b.mota, p.Iraungitze_data
 from bezeroa b
 join Premium p on b.IDBezeroa = p.IDBezeroa;

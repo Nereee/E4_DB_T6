@@ -59,8 +59,8 @@ create table Album(
 );
 
 create table Audioa(
-	IDAudio int auto_increment not null primary key,
-    Izena varchar(100) not null,
+	IDAudio int not null primary key,
+    Izena varchar(100) unique not null,
     Iraupena time,
     AudioIrudia BLOB,
     Mota enum('Podcast','Abestia') not null

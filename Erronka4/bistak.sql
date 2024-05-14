@@ -80,5 +80,17 @@ SELECT
 FROM 
     musikaria;
 
+#Programarako beharrezko bistak
+drop view abestiDiskak;
+create view abestiDiskak as
+
+select IDAudio, Izena, IDAlbum, Izenburua, Iraupena
+from audioa join abestia using (IDAudio) join album using (IDAlbum); 
+
+drop view albumDeskribapena;
+create view albumDeskribapena as 
+
+select Eguna, Generoa, count(IDAudio)as Audioa, SEC_TO_TIME( SUM(time_to_sec(Iraupena)))as Iraupena, IDAlbum, Izenburua
+from audioa join abestia using (IDAudio) join album using (IDAlbum) group by Eguna, Generoa, IDAlbum, Izenburua;
 
     

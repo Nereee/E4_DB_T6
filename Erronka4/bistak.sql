@@ -44,7 +44,7 @@ GROUP BY
 #Podcast_Izena eta Podcaster kontsultarako ikuspegia sortu da
 CREATE VIEW Podcast_Podcaster_View AS
 SELECT 
-    Podcast.Izena AS Podcast_Izena, 
+    Podcast_Izena AS Podcast_Izena, 
     Podcasterra.IzenArtistikoa AS Podcaster
 FROM 
     Podcast

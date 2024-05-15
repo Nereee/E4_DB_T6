@@ -7,7 +7,7 @@ use db_spoty;
 create table musikaria(
 	IDMusikaria int auto_increment not null primary key,
 	IzenArtistikoa varchar(50) not null unique,
-    MusikIrudia BLOB,
+    MusikIrudia longBLOB,
     Ezaugarria enum('bakarlaria', 'taldea') not null,
     Deskribapena varchar (500)
 );
@@ -16,7 +16,7 @@ create table musikaria(
 create table Podcasterra(
 	IDPodcaster int auto_increment not null primary key,
     IzenArtistikoa varchar(50) not null unique,
-    PodIrudia BLOB,
+    PodIrudia longBLOB,
     Deskribapena varchar (100)
 ); 
 
@@ -62,7 +62,7 @@ create table Audioa(
 	IDAudio int not null primary key,
     Izena varchar(100) unique not null,
     Iraupena time,
-    AudioIrudia BLOB,
+    AudioIrudia longBLOB,
     Mota enum('Podcast','Abestia') not null
 );
 

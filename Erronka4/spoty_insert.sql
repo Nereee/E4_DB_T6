@@ -50,26 +50,27 @@ INSERT INTO Audioa (IDAudio, Izena, Iraupena, AudioIrudia, Mota) VALUES
 (10,'Por la Boca Vive el Pez', '00:02:00', '', 'Abestia'),
 (11,'Me Equivocaría Otra Vez', '00:02:00', '', 'Abestia'),
 (12,'Soldadito Marinero', '00:02:00', '', 'Abestia'),
-#The Wild Project podcast
-(13,'En las profundidades del Bosque', '00:45:00', '', 'Podcast'),
-(14,'Conexiones Naturales Entendiendo los Ecosistemas', '00:30:00', '', 'Podcast'),
-(15,'Guardianes del Hábitat Conservación y Sostenibilidad', '01:00:00', '', 'Podcast'),
-#Marikarmen Podcast
-(16,'Symetry', '02:00:00', '', 'Podcast'),
-(17,'Colors', '01:00:00', '', 'Podcast'),
-(18,'This American Life', '00:30:00', '', 'Podcast'),
 #Joe_rogan Podcast
-(19,'Graham Hancock and Flint Dibble', '00:20:00', '', 'Podcast'),
-(20,'Neal Brennam', '00:04:32', '', 'Podcast');
+(13,'Graham Hancock and Flint Dibble', '00:20:00', '', 'Podcast'),
+(14,'Neal Brennam', '00:04:32', '', 'Podcast'),
+#The Wild Project podcast
+(15,'En las profundidades del Bosque', '00:45:00', '', 'Podcast'),
+(16,'Conexiones Naturales Entendiendo los Ecosistemas', '00:30:00', '', 'Podcast'),
+(17,'Guardianes del Hábitat Conservación y Sostenibilidad', '01:00:00', '', 'Podcast'),
+#Marikarmen Podcast
+(18,'Symetry', '02:00:00', '', 'Podcast'),
+(19,'Colors', '01:00:00', '', 'Podcast'),
+(20,'This American Life', '00:30:00', '', 'Podcast');
+
 
 
 INSERT INTO Podcast (IDAudio, Kolaboratzaileak, IDPodcaster)	 VALUES
-(13, NULL, 3),
-(14, 'Mari ', 2),
+(13, NULL, 1),
+(14, 'Mari ', 1),
 (15, 'Juan Magan', 2),
-(16, 'Elon Musk', 1),
-(17, 'Radio lab', 1),
-(18, 'Americano promedio', 1),
+(16, 'Elon Musk', 2),
+(17, 'Radio lab', 2),
+(18, 'Americano promedio', 3),
 (19, 'Graham Hancock', 3),
 (20, 'Flint Dibble', 3);
 

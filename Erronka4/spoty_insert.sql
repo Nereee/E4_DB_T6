@@ -95,25 +95,6 @@ INSERT INTO Playlist (Izenburua, Sorrera_data, IDBezeroa) VALUES
 ('Txirrindula', '2024-01-03', 3),
 ('Basket', '2023-09-09', 4);
 
-INSERT INTO PLaylist_Abestiak (IDList, IDAudio) VALUES
-(1, 1),
-(1, 4),
-(1, 6),
-(1, 8),
-(2, 1),
-(2,4),
-(2,6),
-(2,9),
-(3,7),
-(3,8),
-(3,2),
-(3,12),
-(4,12),
-(4,7),
-(4,6),
-(4,2),
-(4,1);
-
 INSERT INTO Gustukoak (IDBezeroa, IDAudio) VALUES
 (1, 1),
 (1, 6),
@@ -143,8 +124,6 @@ INSERT INTO Erreprodukzioak (IDBezeroa, IDAudio, ErreData) VALUES
 (3, 11, '2024-04-19'),
 (4, 12, '2024-04-19');
 
-INSERT INTO Estatistikak (IDAudio, TopGustokoAbesti, TopGustukoPodcast, TopEntzundakoak, TopPlaylist) VALUES
-(1, 'Top Abestia', 'Top Podcast', 'Top Entzundakoak', 'Top Playlist');
 
 
 

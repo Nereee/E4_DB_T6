@@ -122,8 +122,6 @@ create table EstatistikakEgunero (
     Data date not null,
     ErreprodukzioKopurua int default 0,
     GustukoKopurua int default 0,
-    ErreprodukzioDenboraTotala int default 0,
-    AzkenzErreproduzioData date,
     primary key (IDAudio, data),
     FOREIGN KEY (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
 );
@@ -134,8 +132,6 @@ CREATE TABLE EstatistikakAsteero (
     Astea int not null,
     ErreprodukzioKopurua int default 0,
     GustukoKopurua int default 0,
-    ErreprodukzioDenboraTotala int default 0,
-    AzkenzErreproduzioData date,
     primary key (IDAudio, Urte, Astea),
     foreign key (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
 );
@@ -146,8 +142,6 @@ CREATE TABLE EstatistikakHilero (
     Hilabetea int not null,
     ErreprodukzioKopurua int default 0,
     GustukoKopurua int default 0,
-    ErreprodukzioDenboraTotala int default 0,
-    AzkenzErreproduzioData date,
     primary key (IDAudio, Urte, Hilabetea),
     foreign key (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
 );
@@ -157,8 +151,6 @@ CREATE TABLE EstatistikakUrtero (
     Urte int not null,
     ErreprodukzioKopurua int default 0,
     GustukoKopurua int default 0,
-    ErreprodukzioDenboraTotala int default 0,
-    AzkenzErreproduzioData date,
     primary key (IDAudio, Urte),
     foreign key (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
 );

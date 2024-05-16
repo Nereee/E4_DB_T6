@@ -1,230 +1,159 @@
--- ********************************TRIGGER********************************
-
+-- ********************************TRIGGERRAK********************************
 DELIMITER //
-
-CREATE TRIGGER estadistikak_egunero
+CREATE TRIGGER egunero_estatistikak
 AFTER INSERT ON Erreprodukzioak
 FOR EACH ROW
 BEGIN
-    DECLARE v_IDAudio INT;
-    DECLARE v_Data DATE;
-    DECLARE v_ErreprodukzioDenbora INT;
-    DECLARE v_GustukoKopurua INT;
+    DECLARE audio_data DATE;
+    DECLARE audio_id INT;
     
-    SET v_IDAudio = NEW.IDAudio;
-    SET v_Data = NEW.ErreData;
-    SET v_ErreprodukzioDenbora = (SELECT Iraupena FROM Audioa WHERE IDAudio = v_IDAudio); 
+    SELECT ErreData INTO audio_data FROM Erreprodukzioak WHERE codigo = NEW.codigo;
+    
+    SELECT IDAudio INTO audio_id FROM Erreprodukzioak WHERE codigo = NEW.codigo;
     
     UPDATE EstatistikakEgunero
-    SET ErreprodukzioKopurua = ErreprodukzioKopurua + 1,
-        AzkenzErreproduzioData = v_Data
-    WHERE IDAudio = v_IDAudio AND Data = v_Data;
-    
-    IF (EXISTS (SELECT 1 FROM Gustukoak WHERE IDAudio = v_IDAudio AND IDBezeroa = NEW.IDBezeroa)) THEN
+    SET ErreprodukzioKopurua = ErreprodukzioKopurua + 1
+    WHERE IDAudio = audio_id AND Data = audio_data;
+
+    IF EXISTS (SELECT 1 FROM Gustukoak WHERE IDAudio = audio_id AND Data = audio_data) THEN
         UPDATE EstatistikakEgunero
         SET GustukoKopurua = GustukoKopurua + 1
-        WHERE IDAudio = v_IDAudio AND Data = v_Data;
+        WHERE IDAudio = audio_id AND Data = audio_data;
     END IF;
-    
-    UPDATE EstatistikakEgunero
-    SET ErreprodukzioDenboraTotala = ErreprodukzioDenboraTotala + v_ErreprodukzioDenbora
-    WHERE IDAudio = v_IDAudio AND Data = v_Data;
-    
-    -- Si no existe una fila para este día y audio, insertar una nueva fila en EstatistikakEgunero
-    IF (SELECT COUNT(*) FROM EstatistikakEgunero WHERE IDAudio = v_IDAudio AND Data = v_Data) = 0 THEN
-        INSERT INTO EstatistikakEgunero (IDAudio, Data, ErreprodukzioKopurua, GustukoKopurua, ErreprodukzioDenboraTotala, AzkenzErreproduzioData)
-        VALUES (v_IDAudio, v_Data, 1, 0, v_ErreprodukzioDenbora, v_Data);
-    END IF;
-    
-END//
+END; //
 
-DELIMITER ;
-
-
-INSERT INTO Erreprodukzioak (IDBezeroa, IDAudio, ErreData)
-VALUES (1, 123, '2024-05-16');
-
-SELECT * FROM EstatistikakEgunero WHERE IDAudio = 123 AND Data = '2024-05-16';
+DELIMITER;
 
 DELIMITER //
 
-CREATE TRIGGER estadistikak_astero
-AFTER INSERT ON Erreprodukzioak
-FOR EACH ROW
+CREATE PROCEDURE astero_estatistikak()
 BEGIN
-    DECLARE v_IDAudio INT;
-    DECLARE v_Urte INT;
-    DECLARE v_Astea INT;
-    DECLARE v_ErreprodukzioDenbora INT;
-    DECLARE v_GustukoKopurua INT;
-    
-    SET v_IDAudio = NEW.IDAudio;
-    SET v_Urte = YEAR(NEW.ErreData);
-    SET v_Astea = WEEK(NEW.ErreData);
-    SET v_ErreprodukzioDenbora = (SELECT Iraupena FROM Audioa WHERE IDAudio = v_IDAudio); -- Duración de la reproducción en segundos (supongamos que la columna Iraupena representa la duración del audio en segundos)
-    
-    UPDATE EstatistikakAsteero
-    SET ErreprodukzioKopurua = ErreprodukzioKopurua + 1,
-        AzkenzErreproduzioData = NEW.ErreData
-    WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Astea = v_Astea;
-    
-    IF (EXISTS (SELECT 1 FROM Gustukoak WHERE IDAudio = v_IDAudio AND IDBezeroa = NEW.IDBezeroa)) THEN
-        UPDATE EstatistikakAsteero
-        SET GustukoKopurua = GustukoKopurua + 1
-        WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Astea = v_Astea;
-    END IF;
-    
-    UPDATE EstatistikakAsteero
-    SET ErreprodukzioDenboraTotala = ErreprodukzioDenboraTotala + v_ErreprodukzioDenbora
-    WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Astea = v_Astea;
-    
-    IF (SELECT COUNT(*) FROM EstatistikakAsteero WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Astea = v_Astea) = 0 THEN
-        INSERT INTO EstatistikakAsteero (IDAudio, Urte, Astea, ErreprodukzioKopurua, GustukoKopurua, ErreprodukzioDenboraTotala, AzkenzErreproduzioData)
-        VALUES (v_IDAudio, v_Urte, v_Astea, 1, 0, v_ErreprodukzioDenbora, NEW.ErreData);
-    END IF;
-    
-END//
+    -- Calculamos las estadísticas semanales
+    INSERT INTO EstatistikakAsteero (IDAudio, Urte, Astea, ErreprodukzioKopurua, GustukoKopurua)
+    SELECT 
+        IDAudio, 
+        YEAR(Data) AS Urte, 
+        WEEK(Data) AS Astea, 
+        SUM(ErreprodukzioKopurua), 
+        SUM(GustukoKopurua)
+    FROM 
+        EstatistikakEgunero
+    GROUP BY 
+        IDAudio, Urte, Astea
+    ON DUPLICATE KEY UPDATE 
+        ErreprodukzioKopurua = VALUES(ErreprodukzioKopurua), 
+        GustukoKopurua = VALUES(GustukoKopurua);
+END //
 
 DELIMITER ;
+DELIMITER //
 
-INSERT INTO Erreprodukzioak (IDBezeroa, IDAudio, ErreData)
-VALUES (1, 123, '2024-05-16');
+CREATE PROCEDURE hilero_estatistikak()
+BEGIN
+    -- Calculamos las estadísticas mensuales
+    INSERT INTO EstatistikakHilero (IDAudio, Urte, Hilabetea, ErreprodukzioKopurua, GustukoKopurua)
+    SELECT 
+        IDAudio, 
+        YEAR(Data) AS Urte, 
+        MONTH(Data) AS Hilabetea, 
+        SUM(ErreprodukzioKopurua), 
+        SUM(GustukoKopurua)
+    FROM 
+        EstatistikakEgunero
+    GROUP BY 
+        IDAudio, Urte, Hilabetea
+    ON DUPLICATE KEY UPDATE 
+        ErreprodukzioKopurua = VALUES(ErreprodukzioKopurua), 
+        GustukoKopurua = VALUES(GustukoKopurua);
+END //
 
-SELECT * FROM EstatistikakAsteero WHERE IDAudio = 123 AND Urte = YEAR('2024-05-16') AND Astea = WEEK('2024-05-16');
+DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER estadistikak_hilero
-AFTER INSERT ON Erreprodukzioak
-FOR EACH ROW
+CREATE PROCEDURE urteko_estatistikak()
 BEGIN
-    DECLARE v_IDAudio INT;
-    DECLARE v_Urte INT;
-    DECLARE v_Hilabetea INT;
-    DECLARE v_ErreprodukzioDenbora INT;
-    DECLARE v_GustukoKopurua INT;
-    
-    SET v_IDAudio = NEW.IDAudio;
-    SET v_Urte = YEAR(NEW.ErreData);
-    SET v_Hilabetea = MONTH(NEW.ErreData);
-    SET v_ErreprodukzioDenbora = (SELECT Iraupena FROM Audioa WHERE IDAudio = v_IDAudio); -- Duración de la reproducción en segundos (supongamos que la columna Iraupena representa la duración del audio en segundos)
-    
-    UPDATE EstatistikakHilero
-    SET ErreprodukzioKopurua = ErreprodukzioKopurua + 1,
-        AzkenzErreproduzioData = NEW.ErreData
-    WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Hilabetea = v_Hilabetea;
-    
-    IF (EXISTS (SELECT 1 FROM Gustukoak WHERE IDAudio = v_IDAudio AND IDBezeroa = NEW.IDBezeroa)) THEN
-        UPDATE EstatistikakHilero
-        SET GustukoKopurua = GustukoKopurua + 1
-        WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Hilabetea = v_Hilabetea;
-    END IF;
-    
-    UPDATE EstatistikakHilero
-    SET ErreprodukzioDenboraTotala = ErreprodukzioDenboraTotala + v_ErreprodukzioDenbora
-    WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Hilabetea = v_Hilabetea;
-    
-    IF (SELECT COUNT(*) FROM EstatistikakHilero WHERE IDAudio = v_IDAudio AND Urte = v_Urte AND Hilabetea = v_Hilabetea) = 0 THEN
-        INSERT INTO EstatistikakHilero (IDAudio, Urte, Hilabetea, ErreprodukzioKopurua, GustukoKopurua, ErreprodukzioDenboraTotala, AzkenzErreproduzioData)
-        VALUES (v_IDAudio, v_Urte, v_Hilabetea, 1, 0, v_ErreprodukzioDenbora, NEW.ErreData);
-    END IF;
-    
-END//
+    -- Calculamos las estadísticas anuales
+    INSERT INTO EstatistikakUrtero (IDAudio, Urte, ErreprodukzioKopurua, GustukoKopurua)
+    SELECT 
+        IDAudio, 
+        YEAR(Data) AS Urte, 
+        SUM(ErreprodukzioKopurua), 
+        SUM(GustukoKopurua)
+    FROM 
+        EstatistikakEgunero
+    GROUP BY 
+        IDAudio, Urte
+    ON DUPLICATE KEY UPDATE 
+        ErreprodukzioKopurua = VALUES(ErreprodukzioKopurua), 
+        GustukoKopurua = VALUES(GustukoKopurua);
+END //
 
 DELIMITER ;
 
-INSERT INTO Erreprodukzioak (IDBezeroa, IDAudio, ErreData)
-VALUES (1, 123, '2024-05-16');
 
-SELECT * FROM EstatistikakHilero WHERE IDAudio = 123 AND Urte = YEAR('2024-05-16') AND Hilabetea = MONTH('2024-05-16');
+
+-- ********************************GERTAERAK********************************
+SET GLOBAL event_scheduler = ON;
+
+DELIMITER //
+CREATE EVENT astero_estatistikak
+ON SCHEDULE EVERY 1 WEEK
+DO
+BEGIN
+    CALL astero_estatistikak();
+END //
+DEMILIMITER;
+
+DELIMITER //
+CREATE EVENT hilero_estatistikak
+ON SCHEDULE EVERY 1 MONTH
+DO
+BEGIN
+    CALL hilero_estatistikak();
+END //
+DEMILIMITER;
+
+DELIMITER //
+CREATE EVENT urteko_estatistikak
+ON SCHEDULE EVERY 1 YEAR
+DO
+BEGIN
+    CALL urteko_estatistikak();
+END //
+DEMILIMITER;
+
 
 DELIMITER //
 
-CREATE TRIGGER estadistikak_urtero
-AFTER INSERT ON Erreprodukzioak
-FOR EACH ROW
+CREATE EVENT update_premium_bezeroak
+ON SCHEDULE EVERY 1 DAY
+DO
 BEGIN
-    DECLARE v_IDAudio INT;
-    DECLARE v_Urte INT;
-    DECLARE v_ReproduccionDuracion INT;
-    DECLARE v_GustukoKopurua INT;
+    DECLARE uneko_data DATE;
+    DECLARE erabiltzaile_id INT;
     
-    SET v_IDAudio = NEW.IDAudio;
-    SET v_Urte = YEAR(NEW.ErreData);
-    SET v_ReproduccionDuracion = (SELECT Iraupena FROM Audioa WHERE IDAudio = v_IDAudio); -- Duración de la reproducción en segundos (supongamos que la columna Iraupena representa la duración del audio en segundos)
+    SET uneko_data = CURDATE();
     
-    UPDATE EstatistikakUrtero
-    SET ErreprodukzioKopurua = ErreprodukzioKopurua + 1,
-        AzkenzErreproduzioData = NEW.ErreData
-    WHERE IDAudio = v_IDAudio AND Urte = v_Urte;
+    SELECT IDBezeroa INTO erabiltzaile_id
+    FROM Premium
+    WHERE Iraungitze_data <= uneko_data;
     
-    IF (EXISTS (SELECT 1 FROM Gustukoak WHERE IDAudio = v_IDAudio AND IDBezeroa = NEW.IDBezeroa)) THEN
-        UPDATE EstatistikakUrtero
-        SET GustukoKopurua = GustukoKopurua + 1
-        WHERE IDAudio = v_IDAudio AND Urte = v_Urte;
-    END IF;
-    
-    UPDATE EstatistikakUrtero
-    SET ErreprodukzioDenboraTotala = ErreprodukzioDenboraTotala + v_ReproduccionDuracion
-    WHERE IDAudio = v_IDAudio AND Urte = v_Urte;
-    
-    IF (SELECT COUNT(*) FROM EstatistikakUrtero WHERE IDAudio = v_IDAudio AND Urte = v_Urte) = 0 THEN
-        INSERT INTO EstatistikakUrtero (IDAudio, Urte, ErreprodukzioKopurua, GustukoKopurua, ErreprodukzioDenboraTotala, AzkenzErreproduzioData)
-        VALUES (v_IDAudio, v_Urte, 1, 0, v_ReproduccionDuracion, NEW.ErreData);
-    END IF;
-    
-END//
-
-DELIMITER ;
-
-INSERT INTO Erreprodukzioak (IDBezeroa, IDAudio, ErreData)
-VALUES (1, 123, '2024-05-16');
-
-SELECT * FROM EstatistikakUrtero WHERE IDAudio = 123 AND Urte = YEAR('2024-05-16');
-
--- ********************************TRIGGER********************************
-
-
-
-DELIMITER // 
-
-create event update_premium_bezeroak
-on schedule every 1 day
-do
-begin
-    declare uneko_data date;
-    declare erabiltzaile_id int;
-    
-    set uneko_data = curdate();
-    
-    select idbezeroa into erabiltzaile_id
-    from premium
-    where iraungitze_data <= uneko_data;
-    
-    if erabiltzaile_id is not null then
-        update bezeroa
-        set mota = 'free'
-        where idbezeroa = erabiltzaile_id;
+    IF erabiltzaile_id IS NOT NULL THEN
+        UPDATE Bezeroa
+        SET mota = 'Free'
+        WHERE IDBezeroa = erabiltzaile_id;
         
-        delete from premium
-        where idbezeroa = erabiltzaile_id;
-        
-    end if;
-end;
+        DELETE FROM Premium
+        WHERE IDBezeroa = erabiltzaile_id;
+    END IF;
+END;
+//
 
 DELIMITER ;
 
-update Premium
-set Iraungitze_data = '2023-03-03'
-where IDBezeroa = (
-    select IDBezeroa
-    from bezeroa
-    where Erabiltzailea = 'Mentxaka'
-);
 
-select b.IDBezeroa, b.Izena, b.Abizena, b.Hizkuntza, b.Erabiltzailea, b.Pasahitza, b.Jaiotze_data, b.Erregistro_data, b.mota, p.Iraungitze_data
-from bezeroa b
-join Premium p on b.IDBezeroa = p.IDBezeroa;
+
 
 
 

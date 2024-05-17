@@ -41,19 +41,6 @@ GROUP BY
 
 
 
-#Podcast_Izena eta Podcaster kontsultarako ikuspegia sortu da
-CREATE VIEW Podcast_Podcaster_View AS
-SELECT 
-    Podcast.Izena AS Podcast_Izena, 
-    Podcasterra.IzenArtistikoa AS Podcaster
-FROM 
-    Podcast
-JOIN 
-    Podcasterra ON Podcast.IDPodcaster = Podcasterra.IDPodcaster;
-
-
-
-
 #Premium bezeroak egindako erreprodukzioak askenengo 30 egunetan kontsultarako ikuspegia sortu da.
 CREATE VIEW Premium_Erreprodukzioak_View AS
 SELECT DISTINCT 
@@ -80,5 +67,15 @@ SELECT
 FROM 
     musikaria;
 
+#Programarako beharrezko bistak
+create view abestiDiskak as
+
+select IDAudio, Izena, IDAlbum, Izenburua, Iraupena
+from audioa join abestia using (IDAudio) join album using (IDAlbum); 
+
+create view albumDeskribapena as 
+
+select Eguna, Generoa, count(IDAudio)as Audioa, SEC_TO_TIME( SUM(time_to_sec(Iraupena)))as Iraupena, IDAlbum, Izenburua
+from audioa join abestia using (IDAudio) join album using (IDAlbum) group by Eguna, Generoa, IDAlbum, Izenburua;
 
     

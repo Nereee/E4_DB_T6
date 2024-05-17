@@ -7,7 +7,7 @@ use db_spoty;
 create table musikaria(
 	IDMusikaria int auto_increment not null primary key,
 	IzenArtistikoa varchar(50) not null unique,
-    MusikIrudia BLOB,
+    MusikIrudia longBLOB,
     Ezaugarria enum('bakarlaria', 'taldea') not null,
     Deskribapena varchar (500)
 );
@@ -16,7 +16,7 @@ create table musikaria(
 create table Podcasterra(
 	IDPodcaster int auto_increment not null primary key,
     IzenArtistikoa varchar(50) not null unique,
-    PodIrudia BLOB,
+    PodIrudia longBLOB,
     Deskribapena varchar (100)
 ); 
 
@@ -59,10 +59,10 @@ create table Album(
 );
 
 create table Audioa(
-	IDAudio int auto_increment not null primary key,
-    Izena varchar(100) not null,
+	IDAudio int not null primary key,
+    Izena varchar(100) unique not null,
     Iraupena time,
-    AudioIrudia BLOB,
+    AudioIrudia longBLOB,
     Mota enum('Podcast','Abestia') not null
 );
 
@@ -117,12 +117,41 @@ create table Erreprodukzioak(
     foreign key (IDAudio) references  Audioa (IDAudio) on update cascade on delete set null
 );
 
-create table Estatistikak(
-	IDAudio int auto_increment not null primary key,
-    foreign key (IDAudio) references  Audioa (IDAudio),
-    TopGustokoAbesti varchar(100) not null,
-    TopGustukoPodcast varchar(100) not null,
-    TopEntzundakoak varchar(100) not null,
-    TopPlaylist varchar (100) not null
+create table EstatistikakEgunero (
+    IDAudio int not null,
+    Data date not null,
+    ErreprodukzioKopurua int default 0,
+    GustukoKopurua int default 0,
+    primary key (IDAudio, data),
+    FOREIGN KEY (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
+);
+
+CREATE TABLE EstatistikakAsteero (
+    IDAudio int not null,
+    Urte int not null,
+    Astea int not null,
+    ErreprodukzioKopurua int default 0,
+    GustukoKopurua int default 0,
+    primary key (IDAudio, Urte, Astea),
+    foreign key (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
+);
+
+CREATE TABLE EstatistikakHilero (
+    IDAudio int not null,
+    Urte int not null,
+    Hilabetea int not null,
+    ErreprodukzioKopurua int default 0,
+    GustukoKopurua int default 0,
+    primary key (IDAudio, Urte, Hilabetea),
+    foreign key (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
+);
+
+CREATE TABLE EstatistikakUrtero (
+    IDAudio int not null,
+    Urte int not null,
+    ErreprodukzioKopurua int default 0,
+    GustukoKopurua int default 0,
+    primary key (IDAudio, Urte),
+    foreign key (IDAudio) references Audioa (IDAudio) on delete cascade on update cascade
 );
 

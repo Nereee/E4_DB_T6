@@ -45,7 +45,7 @@ GRANT SELECT, UPDATE ON db_spoty.erreprodukzioak TO 'Dep_burua';
 
 CREATE ROLE Analistak;
 
-#Analistei bakarrik select egiteko baimenak emango dituegu, ez dute ezer ikutu behar, bakarrik datuak atera
+-- Analistei bakarrik select egiteko baimenak emango dituegu, ez dute ezer ikutu behar, bakarrik datuak atera
 GRANT SELECT ON db_spoty.musikaria TO Analistak;
 GRANT SELECT ON db_spoty.bezeroa TO Analistak;
 GRANT SELECT ON  db_spoty.Podcasterra TO Analistak;
@@ -62,7 +62,7 @@ GRANT SELECT ON db_spoty.estatistikak TO Analistak;
 
 GRANT Analistak TO Analista1, Analista2;
 
-#Langileak baimen gehiago eukiko dute, select ia berdinak bainankasu honetan update desberdinak egin dezakete datu berriak sartzeko edo ezabatzeko
+-- Langileak baimen gehiago eukiko dute, select ia berdinak bainankasu honetan update desberdinak egin dezakete datu berriak sartzeko edo ezabatzeko
 grant select, update on db_spoty.musikaria to 'Langilea';
 grant select, update on db_spoty.Podcasterra to 'Langilea';
 grant select, update on db_spoty.hizkuntza to 'Langilea';
@@ -75,7 +75,7 @@ grant select, update on db_spoty.abestia to 'Langilea';
 grant select, update on db_spoty.podcast to 'Langilea';
 
 
-#Bezeroek aldiz, select asko egin ahal izango dute. Abesti eta podcast desberdin entzun ahal izateko, musikarien perfilak ikusteko... Baina datuak txertatxeko limitazioak dituzte, hizkuntza aldatu, haien datuak, playlist-etan aldaketak egin eta gustuko abestaik kendu eta ipini
+-- Bezeroek aldiz, select asko egin ahal izango dute. Abesti eta podcast desberdin entzun ahal izateko, musikarien perfilak ikusteko... Baina datuak txertatxeko limitazioak dituzte, hizkuntza aldatu, haien datuak, playlist-etan aldaketak egin eta gustuko abestaik kendu eta ipini
 grant select on db_spoty.musikaria to  'Bezeroa';
 grant select on db_spoty.podcasterra to  'Bezeroa';
 grant select, update on db_spoty.hizkuntza to  'Bezeroa';
